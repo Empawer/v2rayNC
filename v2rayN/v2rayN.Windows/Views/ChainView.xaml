@@ -1,0 +1,65 @@
+<UserControl
+    x:Class="v2rayN.Views.ChainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    Width="860"
+    Height="620"
+    Style="{StaticResource ViewGlobal}">
+    <DockPanel Margin="{StaticResource Margin8}">
+        <StackPanel DockPanel.Dock="Top">
+            <TextBlock
+                Margin="{StaticResource Margin8}"
+                Style="{StaticResource ModuleTitle}"
+                Text="Chain" />
+            <TextBlock
+                x:Name="txtPath"
+                Margin="{StaticResource Margin8}"
+                Style="{StaticResource ToolbarTextBlock}"
+                TextWrapping="Wrap" />
+            <CheckBox
+                x:Name="chkConsole"
+                Margin="{StaticResource Margin8}"
+                Content="Show Console" />
+        </StackPanel>
+
+        <StackPanel
+            Margin="{StaticResource Margin8}"
+            DockPanel.Dock="Bottom"
+            Orientation="Horizontal">
+            <Button
+                x:Name="btnReset"
+                Margin="{StaticResource MarginRight8}"
+                Content="Reset to default"
+                Style="{StaticResource DefButton}" />
+            <Button
+                x:Name="btnSave"
+                Margin="{StaticResource MarginRight8}"
+                Content="Save"
+                Style="{StaticResource DefButton}" />
+            <Button
+                x:Name="btnClose"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                Content="Close"
+                Style="{StaticResource DefButton}" />
+            <TextBlock
+                x:Name="txtMsg"
+                Margin="{StaticResource Margin8}"
+                VerticalAlignment="Center"
+                Style="{StaticResource ToolbarTextBlock}" />
+        </StackPanel>
+
+        <TextBox
+            x:Name="txtIni"
+            Margin="{StaticResource Margin8}"
+            AcceptsReturn="True"
+            AcceptsTab="True"
+            FlowDirection="LeftToRight"
+            FontFamily="Consolas"
+            HorizontalScrollBarVisibility="Auto"
+            SpellCheck.IsEnabled="False"
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            TextWrapping="NoWrap"
+            VerticalScrollBarVisibility="Auto" />
+    </DockPanel>
+</UserControl>

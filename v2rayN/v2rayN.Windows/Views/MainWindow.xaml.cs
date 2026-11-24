@@ -30,6 +30,14 @@ public partial class MainWindow
         btnNewUpdate.Click += MenuCheckUpdate_Click;
         menuBackupAndRestore.Click += MenuBackupAndRestore_Click;
 
+        // Chain (DoH + TLS fragment + fake packet proxy)
+        menuChain.Click += MenuChain_Click;
+        chkChain.Click += ChkChain_Click;
+        chkChain.IsChecked = ChainManager.EnabledPreference;
+        Application.Current.Exit += (_, _) => ChainManager.StopProcess();
+        AppDomain.CurrentDomain.ProcessExit += (_, _) => ChainManager.StopProcess();
+        _ = Dispatcher.InvokeAsync(RestoreChainAsync);
+
         pbTheme.Content ??= new ThemeSettingView();
 
         this.WhenActivated(disposables =>
@@ -283,6 +291,50 @@ public partial class MainWindow
         DialogHost.Show(_checkUpdateView, "RootDialog");
 
         AppEvents.HasUpdateNotified.Publish(false);
+    }
+
+    private void MenuChain_Click(object sender, RoutedEventArgs e)
+    {
+        DialogHost.Show(new ChainView(), "RootDialog");
+    }
+
+    private async void ChkChain_Click(object sender, RoutedEventArgs e)
+    {
+        chkChain.IsEnabled = false;
+        try
+        {
+            if (chkChain.IsChecked == true)
+            {
+                var err = await ChainManager.StartAsync();
+                if (err != null)
+                {
+                    chkChain.IsChecked = ChainManager.IsRunning;
+                    UI.Show(err);
+                }
+            }
+            else
+            {
+                await ChainManager.StopAsync();
+            }
+        }
+        finally
+        {
+            chkChain.IsEnabled = true;
+        }
+    }
+
+    private async Task RestoreChainAsync()
+    {
+        if (!ChainManager.EnabledPreference)
+        {
+            return;
+        }
+        var err = await ChainManager.StartAsync();
+        if (err != null)
+        {
+            chkChain.IsChecked = false;
+            UI.Show(err);
+        }
     }
 
     private void MenuBackupAndRestore_Click(object sender, RoutedEventArgs e)

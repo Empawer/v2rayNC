@@ -342,6 +342,19 @@
                     </base:MyDGTextColumn>
 
                     <base:MyDGTextColumn
+                        x:Name="colExitIp"
+                        Width="120"
+                        Binding="{Binding ExitIp}"
+                        ExName="ExitIp"
+                        Header="Exit IP" />
+                    <base:MyDGTextColumn
+                        x:Name="colExitLocation"
+                        Width="170"
+                        Binding="{Binding ExitLocation}"
+                        ExName="ExitLocation"
+                        Header="Country / City" />
+
+                    <base:MyDGTextColumn
                         x:Name="colTodayUp"
                         Width="100"
                         Binding="{Binding TodayUp}"

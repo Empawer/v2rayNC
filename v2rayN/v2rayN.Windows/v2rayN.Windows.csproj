@@ -33,6 +33,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- chain.exe goes to <app>\Chain\. dns_chain.ini is NOT shipped: chain.exe creates it
+		     next to itself when missing; the app only reads/saves it (Reset to default regenerates it via chain.exe). -->
+		<Content Include="Chain\chain.exe">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\ServiceLib\ServiceLib.csproj" />
 	</ItemGroup>
 

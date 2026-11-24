@@ -300,6 +300,29 @@
                         <Separator />
                         <Menu Margin="0,1" Style="{StaticResource ToolbarMenu}">
                             <MenuItem
+                                x:Name="menuChain"
+                                Padding="{StaticResource MarginLeftRight8}"
+                                AutomationProperties.Name="Chain">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon
+                                            Margin="{StaticResource MarginRight8}"
+                                            VerticalAlignment="Center"
+                                            Kind="Link" />
+                                        <TextBlock Text="Chain" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                        </Menu>
+                        <CheckBox
+                            x:Name="chkChain"
+                            VerticalAlignment="Center"
+                            AutomationProperties.Name="Enable Chain"
+                            Style="{StaticResource ListItemCheckBox}"
+                            ToolTip="Enable / disable Chain" />
+                        <Separator />
+                        <Menu Margin="0,1" Style="{StaticResource ToolbarMenu}">
+                            <MenuItem
                                 x:Name="menuClose"
                                 Padding="{StaticResource MarginLeftRight8}"
                                 AutomationProperties.Name="{x:Static resx:ResUI.menuClose}">

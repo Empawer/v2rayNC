@@ -357,6 +357,24 @@ public partial class ProfilesView
                     }
                 }
             }
+
+            // Exit IP / Country-City: a saved layout from an older version does not know them yet,
+            // so put them right after the Speed column.
+            var savedNames = lvColumnItem.Select(t => t.Name).ToHashSet();
+            var allColumns = lstProfiles.Columns.Cast<MyDGTextColumn>().ToList();
+            var speedColumn = allColumns.FirstOrDefault(c => c.ExName == "SpeedVal");
+            if (speedColumn != null)
+            {
+                var next = speedColumn.DisplayIndex + 1;
+                foreach (var name in new[] { "ExitIp", "ExitLocation" })
+                {
+                    var column = allColumns.FirstOrDefault(c => c.ExName == name);
+                    if (column != null && !savedNames.Contains(name))
+                    {
+                        column.DisplayIndex = Math.Min(next++, lstProfiles.Columns.Count - 1);
+                    }
+                }
+            }
         }
         catch (Exception ex)
         {
