@@ -358,21 +358,21 @@ public partial class ProfilesView
                 }
             }
 
-            // Exit IP / Country-City: a saved layout from an older version does not know them yet,
-            // so put them right after the Speed column.
-            var savedNames = lvColumnItem.Select(t => t.Name).ToHashSet();
-            var allColumns = lstProfiles.Columns.Cast<MyDGTextColumn>().ToList();
-            var speedColumn = allColumns.FirstOrDefault(c => c.ExName == "SpeedVal");
-            if (speedColumn != null)
+            // Exit IP / Country-City: always right after the Speed column, even if an older
+            // (or wrongly saved) layout put them somewhere else.
+            var ordered = lstProfiles.Columns.Cast<MyDGTextColumn>().OrderBy(c => c.DisplayIndex).ToList();
+            var exitColumns = ordered
+                .Where(c => c.ExName is "ExitIp" or "ExitLocation")
+                .OrderBy(c => c.ExName == "ExitIp" ? 0 : 1)
+                .ToList();
+            var speedColumn = ordered.FirstOrDefault(c => c.ExName == "SpeedVal");
+            if (speedColumn != null && exitColumns.Count > 0)
             {
-                var next = speedColumn.DisplayIndex + 1;
-                foreach (var name in new[] { "ExitIp", "ExitLocation" })
+                ordered.RemoveAll(c => exitColumns.Contains(c));
+                ordered.InsertRange(ordered.IndexOf(speedColumn) + 1, exitColumns);
+                for (var i = 0; i < ordered.Count; i++)
                 {
-                    var column = allColumns.FirstOrDefault(c => c.ExName == name);
-                    if (column != null && !savedNames.Contains(name))
-                    {
-                        column.DisplayIndex = Math.Min(next++, lstProfiles.Columns.Count - 1);
-                    }
+                    ordered[i].DisplayIndex = i;
                 }
             }
         }

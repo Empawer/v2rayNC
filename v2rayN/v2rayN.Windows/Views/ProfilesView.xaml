@@ -267,10 +267,11 @@
                     </Style>
                     <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="DataGridColumnHeader">
                         <EventSetter Event="Click" Handler="LstProfiles_ColumnHeader_Click" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
                     </Style>
 
                     <Style BasedOn="{StaticResource MaterialDesignDataGridCell}" TargetType="DataGridCell">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsActive}" Value="True">
                                 <Setter Property="Background" Value="{DynamicResource MaterialDesign.Brush.Primary.Light}" />
