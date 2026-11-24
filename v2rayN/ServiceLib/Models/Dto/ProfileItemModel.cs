@@ -28,6 +28,14 @@ public partial class ProfileItemModel : ReactiveObject
     [Reactive]
     public partial string IpInfo { get; set; }
 
+    /// <summary>Exit IP of the running config (empty for every other config).</summary>
+    [Reactive]
+    public partial string ExitIp { get; set; }
+
+    /// <summary>Exit country / city of the running config (empty for every other config).</summary>
+    [Reactive]
+    public partial string ExitLocation { get; set; }
+
     [Reactive]
     public partial string TodayUp { get; set; }
 

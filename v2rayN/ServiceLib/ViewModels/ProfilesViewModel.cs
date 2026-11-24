@@ -301,6 +301,23 @@ public partial class ProfilesViewModel : MyReactiveObject
         await Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Re-reads the exit IP / country / city of the running config into the list.
+    /// Only the active config shows these values; every other row stays empty.
+    /// </summary>
+    public void RefreshExitInfoColumns()
+    {
+        RxSchedulers.MainThreadScheduler.Schedule(() =>
+        {
+            foreach (var item in ProfileItems.ToList())
+            {
+                var active = item.IndexId == _config.IndexId;
+                item.ExitIp = active ? ExitInfoManager.Instance.GetIpText(item.IndexId) : string.Empty;
+                item.ExitLocation = active ? ExitInfoManager.Instance.GetLocationText(item.IndexId) : string.Empty;
+            }
+        });
+    }
+
     public async Task UpdateStatistics(ServerSpeedItem update)
     {
         if (!_config.GuiItem.EnableStatistics
@@ -427,6 +444,8 @@ public partial class ProfilesViewModel : MyReactiveObject
                         DelayVal = t33?.Delay != 0 ? $"{t33?.Delay}" : string.Empty,
                         SpeedVal = t33?.Speed > 0 ? $"{t33?.Speed}" : t33?.Message ?? string.Empty,
                         IpInfo = t33?.IpInfo ?? string.Empty,
+                        ExitIp = t.IndexId == _config.IndexId ? ExitInfoManager.Instance.GetIpText(t.IndexId) : string.Empty,
+                        ExitLocation = t.IndexId == _config.IndexId ? ExitInfoManager.Instance.GetLocationText(t.IndexId) : string.Empty,
                         TodayDown = t22 == null ? "" : Utils.HumanFy(t22.TodayDown),
                         TodayUp = t22 == null ? "" : Utils.HumanFy(t22.TodayUp),
                         TotalDown = t22 == null ? "" : Utils.HumanFy(t22.TotalDown),

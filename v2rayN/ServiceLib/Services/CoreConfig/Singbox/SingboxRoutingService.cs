@@ -335,6 +335,13 @@ public partial class CoreConfigSingboxService
             }
         }
 
+        // chain.exe (DoH + TLS fragment local proxy) must always connect directly, never through the TUN
+        var chainExe = Path.Combine(Utils.GetBaseDirectory("Chain"), "chain.exe");
+        if (File.Exists(chainExe))
+        {
+            directExeSet.Add(chainExe);
+        }
+
         return directExeSet.ToList();
     }
 

@@ -275,6 +275,13 @@ public partial class CoreConfigV2rayService
         //directExeSet.Add("xray/");
         directExeSet.Add("self/");
 
+        // chain.exe (DoH + TLS fragment local proxy) must always connect directly, never through the TUN
+        var chainExe = Path.Combine(Utils.GetBaseDirectory("Chain"), "chain.exe");
+        if (File.Exists(chainExe))
+        {
+            directExeSet.Add(chainExe);
+        }
+
         return directExeSet.ToList();
     }
 }

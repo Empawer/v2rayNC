@@ -686,6 +686,10 @@ public partial class MainWindowViewModel : MyReactiveObject
                 NoticeManager.Instance.Enqueue(ResUI.CheckServerSettings);
                 return;
             }
+            // exit IP / country / city belong to the config that is running: forget the old one
+            ExitInfoManager.Instance.Clear();
+            ProfilesViewModel.RefreshExitInfoColumns();
+
             var allResult = await CoreConfigContextBuilder.BuildAll(_config, profileItem);
             if (NoticeManager.Instance.NotifyValidatorResult(allResult.CombinedValidatorResult) && !allResult.Success)
             {
@@ -698,6 +702,9 @@ public partial class MainWindowViewModel : MyReactiveObject
                 await SysProxyHandler.UpdateSysProxy(_config, false);
                 await Task.Delay(1000);
             });
+            // exit IP + country / city of the config that was just started (only this one)
+            _ = RefreshExitInfoAsync(profileItem.IndexId);
+
             RxSchedulers.MainThreadScheduler.Schedule(async () =>
             {
                 var result = await StatusBarViewModel.TestServerAvailability();
@@ -741,6 +748,21 @@ public partial class MainWindowViewModel : MyReactiveObject
                 _hasNextReloadJob = false;
                 await Reload();
             }
+        }
+    }
+
+    private async Task RefreshExitInfoAsync(string indexId)
+    {
+        try
+        {
+            var task = ExitInfoManager.Instance.RefreshAsync(indexId); // marks the row as "..." immediately
+            ProfilesViewModel.RefreshExitInfoColumns();
+            await task;
+            ProfilesViewModel.RefreshExitInfoColumns();
+        }
+        catch (Exception ex)
+        {
+            Logging.SaveLog("MainWindowViewModel", ex);
         }
     }
 
